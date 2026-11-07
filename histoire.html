@@ -298,8 +298,9 @@ addBubble = function(role, text){
 };
 
 /* ============ Text input ============ */
-sendBtn.addEventListener("click", () => send(textInput.value));
-textInput.addEventListener("keydown", e => { if (e.key === "Enter") send(textInput.value); });
+function sendTyped(){ if (wantListen){ finishListening(); return; } send(textInput.value); }
+sendBtn.addEventListener("click", sendTyped);
+textInput.addEventListener("keydown", e => { if (e.key === "Enter") sendTyped(); });
 
 /* ============ Voice toggle ============ */
 voiceBtn.addEventListener("click", () => {
@@ -321,32 +322,42 @@ function setupMic(){
   recog = new SR();
   recog.lang = "fr-FR";
   recog.interimResults = true;
-  recog.continuous = false;
+  recog.continuous = true;   // keep listening through natural pauses
 
-  recog.onstart = () => { listening = true; micBtn.classList.add("live"); micLabel.textContent = "J'écoute… (appuyez pour arrêter)"; setStatus("J'écoute…"); };
-  recog.onend   = () => { listening = false; micBtn.classList.remove("live"); micLabel.textContent = "Appuyez pour parler"; if(!busy) setStatus(""); };
-  recog.onerror = () => { listening = false; micBtn.classList.remove("live"); micLabel.textContent = "Appuyez pour parler"; };
+  recog.onstart = () => { listening = true; micBtn.classList.add("live"); micLabel.textContent = "J'écoute… appuyez quand vous avez terminé"; setStatus("J'écoute…"); };
+  recog.onend   = () => {
+    if (wantListen){ try { recog.start(); } catch(_) {} return; }   // browser stopped on its own: keep going
+    listening = false; micBtn.classList.remove("live"); micLabel.textContent = "Appuyez pour parler"; if(!busy) setStatus("");
+  };
+  recog.onerror = e => { if (e && (e.error === "no-speech" || e.error === "aborted")) return; wantListen = false; listening = false; micBtn.classList.remove("live"); micLabel.textContent = "Appuyez pour parler"; };
 
-  let finalText = "";
   recog.onresult = e => {
     let interim = "";
-    finalText = "";
     for (let i = e.resultIndex; i < e.results.length; i++){
       const t = e.results[i][0].transcript;
-      if (e.results[i].isFinal) finalText += t; else interim += t;
+      if (e.results[i].isFinal) heardText += t.trim() + " "; else interim += t;
     }
-    textInput.value = (finalText || interim);
-    if (finalText.trim()){
-      recog.stop();
-      send(finalText);
-    }
+    textInput.value = (heardText + interim).trim();
+    clearTimeout(silenceTimer);
+    silenceTimer = setTimeout(finishListening, SILENCE_MS);   // only a long silence ends the turn
   };
 }
 
+const SILENCE_MS = 4000;    // 4 seconds of silence = student is done
+let wantListen = false, heardText = "", silenceTimer = null;
+function finishListening(){
+  wantListen = false; clearTimeout(silenceTimer);
+  try { recog.stop(); } catch(_) {}
+  const t = (heardText.trim() || textInput.value.trim()); heardText = "";
+  if (t) send(t);
+}
+
 micBtn.addEventListener("click", () => {
-  if (busy || !recog) return;
-  if (listening){ recog.stop(); return; }
+  if (!recog) return;
+  if (listening || wantListen){ finishListening(); return; }   // tap again = I'm done
+  if (busy) return;
   if ("speechSynthesis" in window) speechSynthesis.cancel();
+  heardText = ""; textInput.value = ""; wantListen = true;
   try { recog.start(); } catch(_) {}
 });
 </script>
