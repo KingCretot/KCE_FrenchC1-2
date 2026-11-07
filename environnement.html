@@ -9,8 +9,8 @@
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
 <style>
 :root{
-  --navy:#1B2C5C; --navy-deep:#12203F; --gold:#E0AC3C; --gold-soft:#F3D89A;
-  --maroon:#8E2A3C; --blue:#2C5CA8; --paper:#FAF7F0; --ink:#22304F; --line:#E3DCCB;
+  --navy:#0A1F3D; --navy-deep:#0A1F3D; --gold:#C9A84C; --gold-soft:#F3D89A;
+  --maroon:#DB2F30; --blue:#0047BA; --paper:#FAF7F0; --ink:#22304F; --line:#E3DCCB;
   --ok:#2E7D52; --radius:18px;
 }
 *{box-sizing:border-box;margin:0;padding:0}
@@ -47,15 +47,15 @@ h1{font-family:'Cormorant Garamond',serif;color:var(--navy);text-align:center;fo
 /* ---------- intro card ---------- */
 .intro{background:var(--navy-deep);color:#fff;border-radius:var(--radius);padding:30px 30px 26px;
   text-align:center;box-shadow:0 12px 30px rgba(27,44,92,.18);
-  background-image:radial-gradient(900px 400px at 50% -20%,rgba(224,172,60,.16),transparent 60%)}
+  background-image:radial-gradient(900px 400px at 50% -20%,rgba(201,168,76,.16),transparent 60%)}
 .intro h2{font-family:'Cormorant Garamond',serif;font-size:27px;font-weight:700;margin-bottom:10px}
 .intro p{font-size:17px;color:#D9E0F0;max-width:560px;margin:0 auto 8px}
 .intro p b{color:var(--gold-soft)}
 .btn{display:inline-block;font-family:'Nunito',sans-serif;font-weight:900;font-size:19px;
   background:var(--gold);color:var(--navy);border:none;border-radius:999px;padding:15px 38px;
   cursor:pointer;letter-spacing:.01em;margin-top:16px;transition:transform .15s,box-shadow .15s;
-  box-shadow:0 6px 18px rgba(224,172,60,.35)}
-.btn:hover{transform:translateY(-2px);box-shadow:0 10px 24px rgba(224,172,60,.45)}
+  box-shadow:0 6px 18px rgba(201,168,76,.35)}
+.btn:hover{transform:translateY(-2px);box-shadow:0 10px 24px rgba(201,168,76,.45)}
 .btn:disabled{opacity:.5;cursor:not-allowed;transform:none;box-shadow:none}
 .btn:focus-visible{outline:3px solid #fff;outline-offset:3px}
 
@@ -119,6 +119,7 @@ h1{font-family:'Cormorant Garamond',serif;color:var(--navy);text-align:center;fo
   h1{font-size:32px} .brand b{font-size:18px} .hud{padding:9px 15px}
   .msg{max-width:94%} .stage{padding:20px 15px 30px}
 }
+@media(max-width:600px){.hud{gap:10px}.brand b{font-size:16px;white-space:nowrap}.brand .tag{font-size:8.5px;letter-spacing:.1em;white-space:nowrap}.levelpill{font-size:10px;padding:5px 10px}.mono{width:40px;height:40px;font-size:20px}}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
@@ -128,7 +129,7 @@ h1{font-family:'Cormorant Garamond',serif;color:var(--navy);text-align:center;fo
   <div class="mono">KC</div>
   <div class="brand">
     <b>KingCretot Experience</b>
-    <div class="tag"><i class="e1">ÉDUQUER.</i> <i class="e2">ÉLEVER.</i> <i class="e3">EXCELLER.</i></div>
+    <div class="tag"><i class="e1">EDUCATE.</i> <i class="e2">EMPOWER.</i> <i class="e3">EXCEL.</i></div>
   </div>
   <div class="hud-spacer"></div>
   <div class="levelpill">Français · C1–C2</div>
